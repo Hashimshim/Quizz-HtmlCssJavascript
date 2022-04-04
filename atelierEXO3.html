@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        
+        form{
+            margin-right:auto;
+            margin-left:auto;
+            width:70%;
+            display:none;
+        }
+        p{
+            display:inline;
+        }
+        input{
+            display:inline;
+        }
+        .vignette{
+            border-radius: 25px;
+            background: 	#90EE90;
+            border:2px gray solid;
+            margin:40px 40px;
+            width:80%;
+            padding:20px 20px;
+            line-height: 30px;
+        }
+        #showhtml,#showcss,#showjavascript{
+            margin-right:auto;
+            margin-left:auto;
+            margin-top:30px;
+            width:50%;
+            height:100px;
+            display:block;
+            background-color:#2F5233;
+            color:white;
+        }
+        .instruction{
+            margin-right:auto;
+            margin-left:auto;
+            width:70%;
+            border:0.5px solid gray;
+            padding:30px 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="instruction">
+        <h2>Instructions</h2>
+        <p>-Ce test contient 30 question en HTML,CSS et JAVASCRIPT pour chaque question cochez la bonne réponse<br></p>
+        <p>-Pour valider le test il faut répondre au moins à 7 questions pour chaques catégorie,sinon la note ne sera
+             pas calculé (Le score sur 30 points)<br></p>
+        <p>-Si vous afficher la solution votre réponse sera compter comme fausse.<br></p>
+        <p>-Si vous voulez envoyer votre reponse appuyer sur la touche "S" de votre clavier</p>
+
+    </div>
+    <button id="showhtml" type="button" onclick="showForm(this.nextSibling.nextSibling.id)">Afficher le Quizz Html</button>
+    <form id="html">  
+        <script src="atelierEXO03squeleton.js"></script>
+    </form>
+    <button id="showcss" type="button" onclick="showForm(this.nextSibling.nextSibling.id)">Afficher le Quizz Css</button>
+    <form id="css">
+        <script src="atelierEXO03squeleton.js"></script>
+    </form>
+    <button id="showjavascript" type="button" onclick="showForm(this.nextSibling.nextSibling.id)">Afficher le Quizz Javascript</button>
+    <form id="javascript">
+        <script src="atelierEXO03squeleton.js"></script>
+    </form>
+</body>
+<script src="atelierEXO03populating.js"></script>
+<script>
+
+    function showForm(formId){
+        var form=document.getElementById(formId);
+        if (form.style.display=='none' || form.style.display==''){
+            form.style.display='block';
+        }else{
+            form.style.display='none';
+        }
+    }
+    var score=0;
+    function showAnswer(formtype,question_id){
+        // every form has 10 vignette classes
+        var vignette_id =parseInt(question_id.substring(1),10)-1;
+        if(formtype=='css'){
+            vignette_id+=10
+        }
+        if(formtype=='javascript'){
+            vignette_id+=20
+        }
+        var vignette = document.getElementsByClassName("vignette")[vignette_id]
+        //console.log(vignette.childNodes[14].disabled); // contains button
+        for(var i=5;i<vignette.childNodes.length;i=i+3){
+
+            if(formtype=='html' && vignette.childNodes[i].id==HTMLformAnswers[question_id]){
+                vignette.childNodes[i].checked=true;
+                score--;
+                break;
+            }
+            if (formtype=='css' && vignette.childNodes[i].id==CSSformAnswers[question_id]){
+                vignette.childNodes[i].checked=true;
+                score--;
+                break;
+            }
+            if (formtype=='javascript' && vignette.childNodes[i].id==JAVASCRIPTformAnswers[question_id]){
+                vignette.childNodes[i].checked=true;
+                score--;
+                break;
+            }
+        }
+        for(var i=5;i<vignette.childNodes.length;i=i+3){
+            vignette.childNodes[i].disabled=true;
+        }
+        vignette.childNodes[14].disabled='true';
+    }
+
+
+    var question_ids=["q1","q2","q3","q4","q5","q6","q7","q8","q9","q10"]; 
+     // we need to find the right place for this
+    function checkForms(){ //// ne marche pas               
+        //////////////////////////////////////////////////////
+        var counter=[0,0,0];
+        for(var x=0;x<question_ids.length;x++){
+            var vignette_id =parseInt(question_ids[x].substring(1),10)-1; ///// we should get the questions id from the button 
+            
+            var vignette = document.getElementsByClassName("vignette")[vignette_id];
+            var firstChoice=document.getElementsByClassName("vignette")[vignette_id].childNodes[5];
+            var secondChoice=document.getElementsByClassName("vignette")[vignette_id].childNodes[8];
+            var thirdChoice=document.getElementsByClassName("vignette")[vignette_id].childNodes[11];
+             // compare between INPUT POSITION  and HTMLformAnswers[question_id]
+            if((firstChoice.checked && HTMLformAnswers[question_ids[x]]==1) ||(secondChoice.checked && HTMLformAnswers[question_ids[x]]==2) || (thirdChoice.checked && HTMLformAnswers[question_ids[x]]==3)){
+                counter[0]++;
+            }   
+            vignette_id+=10;   
+            firstChoice=document.getElementsByClassName("vignette")[vignette_id].childNodes[5];
+            secondChoice=document.getElementsByClassName("vignette")[vignette_id].childNodes[8];
+            thirdChoice=document.getElementsByClassName("vignette")[vignette_id].childNodes[11];
+            vignette = document.getElementsByClassName("vignette")[vignette_id];
+             // compare between INPUT POSITION  and CSSformAnswers[question_id]
+            if((firstChoice.checked && CSSformAnswers[question_ids[x]]==1) || (secondChoice.checked && CSSformAnswers[question_ids[x]]==2) || (thirdChoice.checked && CSSformAnswers[question_ids[x]]==3)){
+                
+                counter[1]++;
+            }
+            // compare between INPUT POSITION  and JAVASCRIPTformAnswers[question_id]
+            vignette_id+=10;
+            firstChoice=document.getElementsByClassName("vignette")[vignette_id].childNodes[5];
+            secondChoice=document.getElementsByClassName("vignette")[vignette_id].childNodes[8];
+            thirdChoice=document.getElementsByClassName("vignette")[vignette_id].childNodes[11];
+            vignette = document.getElementsByClassName("vignette")[vignette_id];
+            
+                if((firstChoice.checked && JAVASCRIPTformAnswers[question_ids[x]]==1) || (secondChoice.checked && JAVASCRIPTformAnswers[question_ids[x]]==2) || (thirdChoice.checked && JAVASCRIPTformAnswers[question_ids[x]]==3)){
+                    counter[2]++;
+                } 
+            }   
+        return counter;
+    }
+
+    function answeredQuestions(){
+        var answeredquestions=[0,0,0];
+        for(var x=0;x<question_ids.length;x++){
+            var vignette_id =parseInt(question_ids[x].substring(1),10)-1; ///// we should get the questions id from the button 
+            var vignette = document.getElementsByClassName("vignette")[vignette_id];
+             var firstChoice=document.getElementsByClassName("vignette")[vignette_id].childNodes[5];
+             var secondChoice=document.getElementsByClassName("vignette")[vignette_id].childNodes[8];
+             var thirdChoice=document.getElementsByClassName("vignette")[vignette_id].childNodes[11];
+             if(firstChoice.checked || secondChoice.checked || thirdChoice.checked)
+             {
+                 answeredquestions[0]++;
+             }
+            vignette_id+=10;
+            firstChoice=document.getElementsByClassName("vignette")[vignette_id].childNodes[5];
+            secondChoice=document.getElementsByClassName("vignette")[vignette_id].childNodes[8];
+            thirdChoice=document.getElementsByClassName("vignette")[vignette_id].childNodes[11];
+            vignette = document.getElementsByClassName("vignette")[vignette_id];
+            if(firstChoice.checked || secondChoice.checked || thirdChoice.checked)
+             {
+                 answeredquestions[1]++;
+             }
+            vignette_id+=10;
+            firstChoice=document.getElementsByClassName("vignette")[vignette_id].childNodes[5];
+            secondChoice=document.getElementsByClassName("vignette")[vignette_id].childNodes[8];
+            thirdChoice=document.getElementsByClassName("vignette")[vignette_id].childNodes[11];
+            vignette = document.getElementsByClassName("vignette")[vignette_id];
+            if(firstChoice.checked || secondChoice.checked || thirdChoice.checked)
+             {
+                 answeredquestions[2]++;
+             }
+        }
+        return answeredquestions;
+
+    }
+    document.addEventListener('keydown', function(event) {        
+    if(event.keyCode == 83) {
+        if(answeredQuestions()[0]<7 && answeredQuestions()[1]<7 && answeredQuestions()[2]<7 ){
+            alert('Veuillez répondre au moins à 7 questions pour chaque categorie');
+        }else{
+            rpns=checkForms();
+            alert('Votre score est de : ' + (rpns[0]+rpns[1]+rpns[2]+score));
+            location.reload();   
+        }     
+    }
+}); 
+</script>
+</html>
